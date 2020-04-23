@@ -7,10 +7,10 @@ const initialMovie = {
     title: "",
     director: "",
     metascore: "",
-    stars: []
+    stars: ['']
 }
 
-const UpdateMovie = () => {
+const UpdateMovie = props => {
     const { push } = useHistory()
     const [movie, setMovie] = useState(initialMovie)
     const { id } = useParams()
@@ -32,6 +32,10 @@ const UpdateMovie = () => {
             value = parseInt(value, 10)
         }
 
+        if (e.target.name === 'stars'){
+            value = e.target.value.split(',')
+        }
+
         setMovie({
             ...movie,
             [e.target.name]: e.target.value
@@ -40,13 +44,23 @@ const UpdateMovie = () => {
 
     const submitForm = e => {
         e.preventDefault()
+        axios.put(`http://localhost:5000/api/movies/${id}`, movie)
+        .then(res => {
+           const updateMovie = res.data
+           const newList = props.movieList.filter(movie => movie.id !== updateMovie.id)
+           props.setMovieList([
+               ...newList,
+               updateMovie
+           ]);
+           push('./')
+        })
 
     }
     
     return(
         <div>
             <h2>Update Movie</h2>
-            <form onSubmit="">
+            <form onSubmit={submitForm}>
                 <input 
                 type="text"
                 name="title"

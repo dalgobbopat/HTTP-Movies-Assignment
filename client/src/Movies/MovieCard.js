@@ -25,7 +25,7 @@ const MovieCard = props => {
           {star}
         </div>
       ))}
-      <div className='save-button' onClick={() => push(`/update-movie/${id}`)}>
+      <div className='update-button' onClick={() => push(`/update-movie/${id}`)}>
         Update
       </div>
     </div>
